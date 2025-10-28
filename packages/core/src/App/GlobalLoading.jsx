@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import LOGO from './LOGO/DELTA1.png';
+import LOGO from './LOGO/DELTA.png';
 import './GlobalLoading.scss';
 
 const GlobalLoading = () => {
