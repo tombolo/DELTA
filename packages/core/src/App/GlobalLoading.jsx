@@ -1,136 +1,98 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import LOGO from './LOGO/DELTA.png';
 import './GlobalLoading.scss';
 
 const GlobalLoading = () => {
-  return (
-    <div className="global-loading">
-      <div className="logo-background" />
-      <div className="background-overlay" />
+    const [progress, setProgress] = useState(0);
+    useEffect(() => {
+        let start = null;
+        let raf = 0;
+        const duration = 10000; // 10s
+        const step = (ts) => {
+            if (start === null) start = ts;
+            const elapsed = ts - start;
+            const pct = Math.min(100, (elapsed / duration) * 100);
+            setProgress(pct);
+            if (pct < 100) raf = requestAnimationFrame(step);
+        };
+        raf = requestAnimationFrame(step);
+        return () => cancelAnimationFrame(raf);
+    }, []);
 
-      <div className="grid-background">
-        <div className="grid-lines" />
-        <div className="grid-overlay" />
-      </div>
+    const columns = 28;
+    const digits = Array.from({ length: columns });
 
-      <div className="content-wrapper">
-        <div className="trading-terminal">
-          <div className="terminal-header">
-            <div className="terminal-title">Loading</div>
-            <div className="terminal-status">
-              <span className="status-indicator" />
-              Initializing...
+    return (
+      <>
+        {/* Background image */}
+        <img
+          src={typeof LOGO === 'string' ? LOGO : (LOGO && LOGO.src)}
+          alt="DELTA"
+          className="gl-bg"
+        />
+
+        {/* Centered 10s progress bar + branding */}
+        <div className="gl-center">
+          <div className="gl-panel">
+            <div className="gl-header">
+              <span>Loading</span>
+              <span>{Math.round(progress)}%</span>
             </div>
-          </div>
-
-          <div className="chart-container">
-            <div className="chart-grid">
-              <div className="grid-line" />
-              <div className="grid-line" />
-              <div className="grid-line" />
-              <div className="grid-line" />
-              <div className="grid-line" />
+            <div className="gl-bar">
+              <div className="gl-bar__fill" style={{ width: `${progress}%` }} />
+              <div className="gl-bar__shine" style={{ opacity: progress > 2 ? 1 : 0 }} />
             </div>
-            <svg className="chart-svg" width="100%" height="100%" />
-            <div className="candlestick-animation">
-              <div className="candlestick">
-                <div className="wick" />
-                <div className="body" />
-              </div>
-              <div className="candlestick">
-                <div className="wick" />
-                <div className="body" />
-              </div>
-              <div className="candlestick">
-                <div className="wick" />
-                <div className="body" />
-              </div>
-              <div className="candlestick">
-                <div className="wick" />
-                <div className="body" />
-              </div>
-              <div className="candlestick">
-                <div className="wick" />
-                <div className="body" />
-              </div>
-            </div>
-          </div>
 
-          <div className="market-ticker">
-            <div className="ticker-scroll">
-              <div className="ticker-item">
-                <span className="ticker-label">System</span>
-                <span className="ticker-value">Starting</span>
-                <span className="ticker-change">...</span>
+            {/* Branding badges below the bar */}
+            <div className="gl-badges">
+              <div className="gl-badge gl-badge--primary">
+                <span className="gl-badge__label">Powered by</span>
+                <span className="gl-badge__brand gl-badge__brand--cyan">Deriv</span>
               </div>
-              <div className="ticker-item">
-                <span className="ticker-label">Modules</span>
-                <span className="ticker-value">Loading</span>
-                <span className="ticker-change">...</span>
-              </div>
-              <div className="ticker-item">
-                <span className="ticker-label">UI</span>
-                <span className="ticker-value">Preparing</span>
-                <span className="ticker-change">...</span>
+              <div className="gl-badge gl-badge--secondary">
+                <span className="gl-badge__label">In partnership with</span>
+                <span className="gl-badge__brand gl-badge__brand--green">Deriv</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="progress-section">
-          <div className="progress-container">
-            <div className="progress-labels">
-              <div className="progress-text">Preparing environment</div>
-              <div className="progress-message">Please wait while we set things up</div>
-            </div>
-            <div className="progress-track">
-              <div className="progress-bar">
-                <div className="progress-glow" />
-                <div className="progress-pulse" />
+        {/* Effects overlay */}
+        <div className="fx-overlay">
+          {/* Grid glow */}
+          <div className="fx-grid" />
+          {/* Scanning line */}
+          <div className="scan-line" />
+          {/* Matrix rain */}
+          <div className="fx-rain">
+            {digits.map((_, i) => (
+              <div
+                key={i}
+                className="rain-col"
+                style={{
+                  left: `${(i / columns) * 100}%`,
+                  animation: `rain-fall ${5 + (i % 7) * 0.5}s linear infinite`,
+                  animationDelay: `${(i % 10) * 0.3}s`,
+                }}
+              >
+                {Array.from({ length: 24 }).map((__, j) => (
+                  <span
+                    key={j}
+                    className="digit"
+                    style={{ transform: `translateY(${j * 18}px)` }}
+                  >
+                    {Math.random() > 0.5 ? '1' : '0'}
+                  </span>
+                ))}
               </div>
-            </div>
-            <div className="progress-markers">
-              <div className="marker" />
-              <div className="marker" />
-              <div className="marker" />
-              <div className="marker" />
-              <div className="marker" />
-              <div className="marker" />
-              <div className="marker" />
-              <div className="marker" />
-              <div className="marker" />
-              <div className="marker" />
-            </div>
+            ))}
           </div>
         </div>
-      </div>
 
-      <div className="deriv-branding">
-        <div className="powered-by">
-          <span className="brand-text">Powered by</span>
-          <span className="deriv-name">Deriv</span>
-          <div className="brand-glow" />
-        </div>
-        <div className="partnership">
-          <span className="brand-text">In partnership with</span>
-          <span className="deriv-name">Deriv</span>
-          <div className="brand-glow" />
-        </div>
-      </div>
-
-      <div className="connection-nodes">
-        <div className="node"><div className="node-pulse" /></div>
-        <div className="node"><div className="node-pulse" /></div>
-        <div className="node"><div className="node-pulse" /></div>
-        <div className="node"><div className="node-pulse" /></div>
-        <div className="node"><div className="node-pulse" /></div>
-        <div className="node"><div className="node-pulse" /></div>
-        <div className="node"><div className="node-pulse" /></div>
-        <div className="node"><div className="node-pulse" /></div>
-      </div>
-    </div>
-  );
+      </>
+    );
 };
 
 export default GlobalLoading;
