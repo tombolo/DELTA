@@ -84,6 +84,12 @@ const GlobalLoading = () => {
 
     return (
         <div className='global-loading'>
+            {/* Logo Background */}
+            <div className='logo-background'></div>
+
+            {/* Enhanced overlay for better readability */}
+            <div className='background-overlay'></div>
+
             {/* Grid background */}
             <div className='grid-background'>
                 <div className='grid-lines'></div>
@@ -183,12 +189,12 @@ const GlobalLoading = () => {
                     },
                 }}
             >
-                <img src={LOGO} alt='Deriv Logo' className='logo' />
+                <img src={LOGO} alt='NILOTE Logo' className='logo' />
                 <motion.div
                     className='logo-glow'
                     animate={{
-                        opacity: [0.3, 0.6, 0.3],
-                        scale: [1, 1.1, 1],
+                        opacity: [0.3, 0.8, 0.3],
+                        scale: [1, 1.2, 1],
                     }}
                     transition={{
                         duration: 3,
