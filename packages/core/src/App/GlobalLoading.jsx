@@ -26,11 +26,12 @@ const GlobalLoading = () => {
 
     return (
       <>
-        {/* Background image */}
-        <img
-          src={typeof LOGO === 'string' ? LOGO : (LOGO && LOGO.src)}
-          alt="DELTA"
-          className="gl-bg"
+        {/* Background image container */}
+        <div 
+          className="gl-bg-container"
+          style={{ 
+            backgroundImage: `url(${typeof LOGO === 'string' ? LOGO : (LOGO && LOGO.src)})` 
+          }}
         />
 
         {/* Centered 10s progress bar + branding */}
